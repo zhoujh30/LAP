@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="./favicon.ico">
+
+    <title>Language Access Plan</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" /> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="css/leaflet-sidebar.css" /> -->
+    <link rel="icon" type="image/png" href="./favicon.png">
+
+  </head>
+
+  <style>
+    html, body, #container {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      padding-top: 50px;
+    }
+
+    #map {
+      width: auto;
+      height: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.55);
+    }
+
+    #sidebar {
+      width: 300px;
+      height: 100%;
+      max-width: 100%;
+      float: left;
+      -webkit-transition: all 0.25s ease-out;
+      -moz-transition: all 0.25s ease-out;
+      transition: all 0.25s ease-out;
+    }
+
+    .navbar .navbar-brand {
+      font-weight: bold;
+      font-size: 25px;
+      color: #FFFFFF;
+    }
+
+    .navbar {
+      background-image: linear-gradient(to bottom, #2b6988 0%, #1f4b61 100%);
+    }
+
+    .navbar-inverse .navbar-nav>li>a {
+      color: #fff;
+    }
+
+    .legend {
+      width: 325px;
+      height: 140px;
+      text-align: left;
+      line-height: 18px;
+    }
+
+    .legend i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 20px;
+      margin-left: 100px;
+      margin-top: auto;
+      opacity: 0.7;
+      outline: black solid thin;
+    }
+
+/*    .info {
+    width: 325px;
+        height: 28px;
+        padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+        text-align: left;
+  }
+    .info h4 {
+      margin: 0 0 5px;
+          text-align: center;
+          padding-top: 4px;
+          padding-bottom: 4px;
+    }
+
+    .info i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 20px;
+      margin-left: 100px;
+      opacity: 0.7;
+      outline: black solid thin;
+      margin-top: 5px;
+    }*/
+
+  </style>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+          </div>
+          <a class="navbar-brand" href="#">Language Access Plan</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="" data-toggle="modal" data-target="#myModal">Contact Us</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group has-feedback">
+                <span class="twitter-typeahead" style="position: static; display: block; direction: ltr;"><input id="searchbox" type="text" placeholder="Search" class="form-control tt-input" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none; right: auto;"><div class="tt-dataset-Boroughs"></div><div class="tt-dataset-Theaters"></div><div class="tt-dataset-Museums"></div><div class="tt-dataset-GeoNames"></div></span></span>
+                <span id="searchicon" class="fa fa-search form-control-feedback"></span>
+            </div>
+          </form>
+          <ul class="nav navbar-nav">
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <li class="dropdown">
+              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Download the Data</a></li>
+              </ul>
+            </li>
+            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Sidebar</a></li>
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+<!--       <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Contact Us</h4>
+        </div>
+        <div class="modal-body">
+          For any inquiries, email us at <a class="btn btn-primary emailbutton" role="button" href="mailto:felix.zhou@nyu.edu">felix.zhou@nyu.edu</a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div> -->
+
+    <div id="container">
+      <div id="sidebar">
+      </div>
+      <div id="map">
+      </div>
+
+    </div><!-- /.container -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <!-- <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="data/nta_lap_exported.geojson.json"></script>
+    <!-- <script src="js/leaflet-sidebar.js"></script>  -->
+    <script>
+
+
+    var map1 = new L.Map('map', { 
+      layer:[all, spanish, frenchCreole, italian, russian, chinese, korean],
+      center: [40.7127,-74.0059],
+      zoom: 10
+    });
+
+    // var sidebar = L.control.sidebar('sidebar').addTo(map1);
+    
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    }).addTo(map1);
+
+    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    // attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    // maxZoom: 18,
+    // id: 'nycedcmisgis.ndh346pj',
+    // accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
+    // }).addTo(map1);
+
+    // var info = L.control({position: 'topleft'});
+
+    info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info');
+      this.updateAll();
+      return this._div;
+    };
+
+
+    //default All layer
+
+    var all = L.geoJson(mapData, {style: allStyle, onEachFeature: onEachFeatureAll}).addTo(map1);
+
+    info.updateAll = function (props) {
+      this._div.innerHTML =   (props ? '<i style="background:' + getAllColor(props.lgoenglepp) + '"></i> ' + '<b>' + props.ntaname + '</b><br />' + (props.lgoenglepp === 0 ? 'N/A' : props.lgoenglepp + '%') 
+        : '<h4>Click a Neighborhood</h4>');
+    };
+
+    function getAllColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 10 ? '#fef0d9':
+      d <= 25 ? '#fdcc8a':
+      d <= 50 ? '#fc8d59':
+      '#d7301f';
+    }
+
+    function allStyle(feature) {
+      return {
+      fillColor: getAllColor(feature.properties.lgoenglepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureAll(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightAll,
+            click: zoomToFeatureAll
+        });
+    }
+
+    function highlightFeature(e) {
+    var layer = e.target;
+  
+    layer.setStyle({
+        weight: 3,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.8
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+            layer.bringToFront();
+        }
+     
+    } 
+
+    function resetHighlightAll(e) {
+        all.resetStyle(e.target);
+    }
+
+    function zoomToFeatureAll(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    } 
+
+    //Spanish Layer
+
+    var spanish = L.geoJson(mapData, {style: spanishStyle, onEachFeature: onEachFeatureSpanish});
+
+    function getSpanishColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 5 ? '#edf8fb':
+      d <= 15 ? '#b3cde3':
+      d <= 25 ? '#8c96c6':
+      '#88419d';
+    }
+
+    function spanishStyle(feature) {
+      return {
+      fillColor: getSpanishColor(feature.properties.lgsplepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureSpanish(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightSpanish,
+            click: zoomToFeatureSpanish
+        });
+    }
+
+    function resetHighlightSpanish(e) {
+        spanish.resetStyle(e.target);
+    }
+
+    function zoomToFeatureSpanish(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    }
+
+    //French Creole Layer
+
+    var frenchCreole = L.geoJson(mapData, {style: frenchCrStyle, onEachFeature: onEachFeatureFrenchCr});
+
+    function getFrenchCrColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 0.5 ? '#feebe2':
+      d <= 2.5 ? '#fbb4b9':
+      d <= 4.5 ? '#f768a1':
+      '#ae017e';
+    }
+
+    function frenchCrStyle(feature) {
+      return {
+      fillColor: getFrenchCrColor(feature.properties.lgfrcrlepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureFrenchCr(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightFrenchCr,
+            click: zoomToFeatureFrenchCr
+        });
+    }
+
+    function resetHighlightFrenchCr(e) {
+        frenchCreole.resetStyle(e.target);
+    }
+
+    function zoomToFeatureFrenchCr(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    }
+
+    //Italian Layer
+
+    var italian = L.geoJson(mapData, {style: italianStyle, onEachFeature: onEachFeatureItalian});
+
+    function getItalianColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 0.5 ? '#ffffcc':
+      d <= 1 ? '#c2e699':
+      d <= 2 ? '#78c679':
+      '#238443';
+    }
+
+    function italianStyle(feature) {
+      return {
+      fillColor: getItalianColor(feature.properties.lgitlepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureItalian(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightItalian,
+            click: zoomToFeatureItalian
+        });
+    }
+
+    function resetHighlightItalian(e) {
+        italian.resetStyle(e.target);
+    }
+
+    function zoomToFeatureItalian(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    }
+
+    //Russian Layer
+
+    var russian = L.geoJson(mapData, {style: russianStyle, onEachFeature: onEachFeatureRussian});
+
+    function getRussianColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 2 ? '#fee5d9':
+      d <= 10 ? '#fcae91':
+      d <= 20 ? '#fb6a4a':
+      '#cb181d';
+    }
+
+    function russianStyle(feature) {
+      return {
+      fillColor: getRussianColor(feature.properties.lgruslepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureRussian(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightRussian,
+            click: zoomToFeatureRussian
+        });
+    }
+
+    function resetHighlightRussian(e) {
+        russian.resetStyle(e.target);
+    }
+
+    function zoomToFeatureRussian(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    }
+
+    //Chinese Layer
+
+    var chinese = L.geoJson(mapData, {style: chineseStyle, onEachFeature: onEachFeatureChinese});
+  
+    function getChineseColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 3 ? '#ffffcc':
+      d <= 10 ? '#a1dab4':
+      d <= 20 ? '#41b6c4':
+      '#225ea8';
+    }
+
+    function chineseStyle(feature) {
+      return {
+      fillColor: getChineseColor(feature.properties.lgchilepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureChinese(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightChinese,
+            click: zoomToFeatureChinese
+        });
+    }
+
+    function resetHighlightChinese(e) {
+        chinese.resetStyle(e.target);
+    }
+
+    function zoomToFeatureChinese(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    }
+
+    //Korean Layer
+
+    var korean = L.geoJson(mapData, {style: koreanStyle, onEachFeature: onEachFeatureKorean});
+
+    function getKoreanColor(d,k) {
+      return k != 'NTA'? '#969696':
+      d <= 0.5 ? '#f1eef6':
+      d <= 2 ? '#d7b5d8':
+      d <= 5 ? '#df65b0':
+      '#ce1256';
+    }
+
+    function koreanStyle(feature) {
+      return {
+      fillColor: getKoreanColor(feature.properties.lgkorlepp, feature.properties.bndrytype),
+      weight: .5,
+      opacity: 1,
+      fillOpacity: 0.7,
+      color: 'white'
+      };
+    }
+
+    function onEachFeatureKorean(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightKorean,
+            click: zoomToFeatureKorean
+        });
+    }
+
+    function resetHighlightKorean(e) {
+        korean.resetStyle(e.target);
+    }
+
+    function zoomToFeatureKorean(e) {
+        map1.fitBounds(e.target.getBounds());
+        info.updateAll(layer.feature.properties);
+    }
+
+
+    var baselayMaps = {
+      "All - Speak English Less Than 'Very Well'": all,
+      "Spanish - Speak English Less Than 'Very Well'": spanish,
+      "French Creole - Speak English Less Than 'Very Well'": frenchCreole,
+      "Italian - Speak English Less Than 'Very Well'": italian,
+      "Russian - Speak English Less Than 'Very Well'": russian,
+      "Chinese - Speak English Less Than 'Very Well'": chinese,
+      "Korean - Speak English Less Than 'Very Well'": korean
+    };
+
+    L.control.layers(baselayMaps).addTo(map1); 
+
+
+    var legend = L.control({position: 'topleft'});
+
+    legend.onAdd = function (map) {
+
+      var divAll = L.DomUtil.create('div', 'info legend'),
+        gradesAll = [0.0, 10, 25, 50, 100],
+        labelsAll = [],
+        from, to;
+
+      for (var i = 0; i < gradesAll.length; i++) {
+        from = gradesAll[i];
+        to = gradesAll[i + 1];
+
+        labelsAll.push(
+          '<i style="background:' + getAllColor(from + 1) + '"></i> ' +
+          from + (to ? '% &ndash; ' + to + '%' : '% +') );
+      }
+
+      divAll.innerHTML = '<h4>All</h4>' + '<i style="background:' + getAllColor(0) + '"></i> ' + 'N/A' + '<br>' + labelsAll.join('<br>');
+                
+      return divAll;
+    };
+
+    legend.addTo(sidebar);
+
+
+    // var layerUrl = 'http://documentation.cartodb.com/api/v2/viz/236085de-ea08-11e2-958c-5404a6a683d5/viz.json';
+
+    // cartodb.createLayer(map, layerUrl)
+    //   .addTo(map)
+    //   .on('done', function(layer) {
+
+    //   }).on('error', function() {
+    //     //log the error
+    //   });
+
+
+    </script>
+  </body>
+</html>
