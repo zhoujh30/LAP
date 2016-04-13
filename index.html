@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="./favicon.ico">
+    <!-- <link rel="icon" href="./favicon.ico"> -->
 
     <title>Language Access Plan</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -15,7 +15,7 @@
     <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" /> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <!-- <link rel="stylesheet" href="css/leaflet-sidebar.css" /> -->
-    <link rel="icon" type="image/png" href="./favicon.png">
+    <!-- <link rel="icon" type="image/png" href="./favicon.png"> -->
 
   </head>
 
@@ -194,7 +194,7 @@
     // accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
     // }).addTo(map1);
 
-    // var info = L.control({position: 'topleft'});
+    var info = L.control({position: 'topleft'});
 
     info.onAdd = function (map) {
       this._div = L.DomUtil.create('div', 'info');
