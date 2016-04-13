@@ -60,8 +60,39 @@
       color: #fff;
     }
 
+    .info {
+      width: 320px;
+      height: 600px;
+      padding: 6px 8px;
+      font: 14px/16px Arial, Helvetica, sans-serif;
+      background: white;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .info h5 {
+      margin: 0 0 5px;
+      text-align: center;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .info i {
+      width: 18px;
+      height: 18px;
+      float: left;
+      margin-right: 20px;
+      margin-left: 100px;
+      opacity: 0.7;
+      outline: black solid thin;
+      margin-top: 5px;
+    }
+
     .legend {
-      width: 325px;
+      width: 370px;
       height: 140px;
       text-align: left;
       line-height: 18px;
@@ -78,34 +109,6 @@
       outline: black solid thin;
     }
 
-/*    .info {
-    width: 325px;
-        height: 28px;
-        padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-        text-align: left;
-  }
-    .info h4 {
-      margin: 0 0 5px;
-          text-align: center;
-          padding-top: 4px;
-          padding-bottom: 4px;
-    }
-
-    .info i {
-      width: 18px;
-      height: 18px;
-      float: left;
-      margin-right: 20px;
-      margin-left: 100px;
-      opacity: 0.7;
-      outline: black solid thin;
-      margin-top: 5px;
-    }*/
 
   </style>
 
@@ -159,8 +162,8 @@
       </div> -->
 
     <div id="container">
-      <div id="sidebar">
-      </div>
+      <!-- <div id="sidebar">
+      </div> -->
       <div id="map">
       </div>
 
@@ -202,6 +205,7 @@
       return this._div;
     };
 
+    var legend = L.control({position: 'topleft'});
 
     //default All layer
 
@@ -239,29 +243,54 @@
     }
 
     function highlightFeature(e) {
-    var layer = e.target;
-  
-    layer.setStyle({
-        weight: 3,
-        color: 'white',
-        dashArray: '',
-        fillOpacity: 0.8
-    });
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.8
+      });
 
-    if (!L.Browser.ie && !L.Browser.opera) {
-            layer.bringToFront();
-        }
-     
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      // info.updateAll(layer.feature.properties);
     } 
 
     function resetHighlightAll(e) {
         all.resetStyle(e.target);
+        // info.updateAll();
     }
 
     function zoomToFeatureAll(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        
     } 
+
+    legend.onAdd = function (map) {
+
+      var divAll = L.DomUtil.create('div', 'info legend'),
+        gradesAll = [0, 10, 25, 50],
+        labelsAll = [],
+        from, to;
+
+      for (var i = 0; i < gradesAll.length; i++) {
+        from = gradesAll[i];
+        to = gradesAll[i + 1];
+
+        labelsAll.push(
+          '<i style="background:' + getAllColor(from + 0.1, "NTA") + '"></i> ' +
+          from + (to ? '% &ndash; ' + to + '%' : '% +') );
+      }
+
+      divAll.innerHTML = "<h5>All - Speak English Less Than 'Very Well'</h5>" + '<i style="background:' + getAllColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsAll.join('<br>');
+                
+      return divAll;
+    };
+
+    legend.addTo(map1);
+
 
     //Spanish Layer
 
@@ -511,31 +540,138 @@
     L.control.layers(baselayMaps).addTo(map1); 
 
 
-    var legend = L.control({position: 'topleft'});
+    //Legend Change
+    map1.on("baselayerchange", function(eventLayer) {
+      legend.getContainer().innerHTML = eventLayer.name;
+      if (eventLayer.name === "All - Speak English Less Than 'Very Well'") {
 
-    legend.onAdd = function (map) {
+        var gradesAll = [0, 10, 25, 50],
+            labelsAll = [],
+            from, to;
 
-      var divAll = L.DomUtil.create('div', 'info legend'),
-        gradesAll = [0.0, 10, 25, 50, 100],
-        labelsAll = [],
-        from, to;
+        for (var i = 0; i < gradesAll.length; i++) {
+          from = gradesAll[i];
+          to = gradesAll[i + 1];
 
-      for (var i = 0; i < gradesAll.length; i++) {
-        from = gradesAll[i];
-        to = gradesAll[i + 1];
+          labelsAll.push(
+            '<i style="background:' + getAllColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
 
-        labelsAll.push(
-          '<i style="background:' + getAllColor(from + 1) + '"></i> ' +
-          from + (to ? '% &ndash; ' + to + '%' : '% +') );
-      }
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getAllColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsAll.join('<br>');
+        } 
 
-      divAll.innerHTML = '<h4>All</h4>' + '<i style="background:' + getAllColor(0) + '"></i> ' + 'N/A' + '<br>' + labelsAll.join('<br>');
-                
-      return divAll;
-    };
+      
+      else if (eventLayer.name === "Spanish - Speak English Less Than 'Very Well'") {
 
-    legend.addTo(sidebar);
+        var gradesSpanish = [0, 5, 15, 25],
+            labelsSpanish = [],
+            from, to;
 
+        for (var i = 0; i < gradesSpanish.length; i++) {
+          from = gradesSpanish[i];
+          to = gradesSpanish[i + 1];
+
+          labelsSpanish.push(
+            '<i style="background:' + getSpanishColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
+
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getSpanishColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsSpanish.join('<br>');
+        }
+
+      else if (eventLayer.name === "French Creole - Speak English Less Than 'Very Well'") {
+
+        var gradesFrenchCr = [0, 0.5, 2.5, 4.5],
+            labelsFrenchCr = [],
+            from, to;
+
+        for (var i = 0; i < gradesFrenchCr.length; i++) {
+          from = gradesFrenchCr[i];
+          to = gradesFrenchCr[i + 1];
+
+          labelsFrenchCr.push(
+            '<i style="background:' + getFrenchCrColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
+
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getFrenchCrColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsFrenchCr.join('<br>');
+        } 
+
+      else if (eventLayer.name === "Italian - Speak English Less Than 'Very Well'") {
+
+        var gradesItalian = [0, 0.5, 1, 2],
+            labelsItalian = [],
+            from, to;
+
+        for (var i = 0; i < gradesItalian.length; i++) {
+          from = gradesItalian[i];
+          to = gradesItalian[i + 1];
+
+          labelsItalian.push(
+            '<i style="background:' + getItalianColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
+
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getItalianColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsItalian.join('<br>');
+        } 
+
+      else if (eventLayer.name === "Russian - Speak English Less Than 'Very Well'") {
+
+        var gradesRussian = [0, 2, 10, 20],
+            labelsRussian = [],
+            from, to;
+
+        for (var i = 0; i < gradesRussian.length; i++) {
+          from = gradesRussian[i];
+          to = gradesRussian[i + 1];
+
+          labelsRussian.push(
+            '<i style="background:' + getRussianColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
+
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getRussianColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsRussian.join('<br>');
+        } 
+
+      else if (eventLayer.name === "Chinese - Speak English Less Than 'Very Well'") {
+
+        var gradesChinese = [0, 3, 10, 20],
+            labelsChinese = [],
+            from, to;
+
+        for (var i = 0; i < gradesChinese.length; i++) {
+          from = gradesChinese[i];
+          to = gradesChinese[i + 1];
+
+          labelsChinese.push(
+            '<i style="background:' + getChineseColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
+
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getChineseColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsChinese.join('<br>');
+        } 
+
+      else if (eventLayer.name === "Korean - Speak English Less Than 'Very Well'") {
+
+        var gradesKorean = [0, 0.5, 2, 5],
+            labelsKorean = [],
+            from, to;
+
+        for (var i = 0; i < gradesKorean.length; i++) {
+          from = gradesKorean[i];
+          to = gradesKorean[i + 1];
+
+          labelsKorean.push(
+            '<i style="background:' + getKoreanColor(from + 0.1, "NTA") + '"></i> ' +
+            from + (to ? '% &ndash; ' + to + '%' : '% +') );
+        }
+
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getKoreanColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsKorean.join('<br>');
+        }  
+ 
+    });
+    
 
     // var layerUrl = 'http://documentation.cartodb.com/api/v2/viz/236085de-ea08-11e2-958c-5404a6a683d5/viz.json';
 
