@@ -10,6 +10,10 @@
     <!-- <link rel="icon" href="./favicon.ico"> -->
 
     <title>Language Access Plan</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+    <script src="js/nv.d3.js"></script>
+    <script src="js/script.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <!-- <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" /> -->
@@ -21,7 +25,7 @@
 
   <style>
     html, body, #container {
-      height: 100%;
+      height: 100%; 
       width: 100%;
       overflow: hidden;
     }
@@ -36,14 +40,24 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.55);
     }
 
-    #sidebar {
-      width: 300px;
-      height: 100%;
-      max-width: 100%;
-      float: left;
-      -webkit-transition: all 0.25s ease-out;
-      -moz-transition: all 0.25s ease-out;
-      transition: all 0.25s ease-out;
+    .sidebar {
+      padding: 16px;
+      position: absolute;
+      right: 20px;
+      top: 80px;
+      z-index: 100;
+      background: #ffffff;
+      border-radius: 4px;
+      color: #666;
+      width: 254px;
+      /*min-height: 400px;*/
+      box-sizing: border-box;
+    }
+
+    .sidebar h4 {
+      margin: 0 0 10px 0;
+      min-height: 48px;
+      font-size:20px;
     }
 
     .navbar .navbar-brand {
@@ -62,7 +76,7 @@
 
     .info {
       width: 385px;
-      height: 5 0px;
+      height: 42px;
       padding: 6px 8px;
       font: 14px/16px Arial, Helvetica, sans-serif;
       background: white;
@@ -87,8 +101,28 @@
       margin-right: 20px;
       margin-left: 50px;
       opacity: 0.5;
-      outline: grey solid thin;
+      outline: gray solid thin;
       margin-top: 5px;
+    }
+
+    .click {
+      width: 385px;
+      height: 240px;
+      padding: 6px 8px;
+      font: 14px/16px Arial, Helvetica, sans-serif;
+      background: white;
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .click h5 {
+      margin: 0 0 5px;
+      text-align: center;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      font-weight: bold;
     }
 
     .legend {
@@ -106,7 +140,7 @@
       margin-left: 50px;
       margin-top: auto;
       opacity: 0.5;
-      outline: grey solid thin;
+      outline: gray solid thin;
     }
 
 
@@ -162,15 +196,33 @@
       </div> -->
 
     <div id="container">
-      <!-- <div id="sidebar">
+      <!-- <div class='sidebar mainSidebar'>
+        <h4 class='schoolName'>Hover over the map to see performance data</h4>
+        <div class='meanItem'>
+          <div class='meanLabel'>Math Mean:</div>
+          <div class = "mathMean mean"></div>
+        </div>
+          <div class='meanItem'>
+          <div class='meanLabel'>ELA Mean:</div>  
+          <div class = "elaMean mean"></div>
+        </div>
+        <div id="chartContainer">
+        Students tested (Math/ELA): <div id="studentsTested"></div> 
+        </div>
+        <div id="chartContainer">
+        <div>% of total students tested by <a href = "http://www.p12.nysed.gov/irs/ela-math/2014/2014-ELADefinitionsofPerformanceLevels.pdf">performance level</a></div>
+       
+        <div id="mathChart"><svg></svg></div>
+       
+        <div id="elaChart"><svg></svg></div>
       </div> -->
+     
       <div id="map">
       </div>
 
     </div><!-- /.container -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
     <!-- <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="data/nta_lap_exported.geojson.json"></script>
@@ -198,9 +250,9 @@
     accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
     }).addTo(map1);
 
-    var info = L.control({position: 'topleft'});
-
-    var legend = L.control({position: 'topleft'});
+    var info = L.control({position: 'bottomleft'});
+    var infoClick = L.control({position: 'bottomleft'});
+    var legend = L.control({position: 'bottomleft'});
 
     //add Community District Boundary
     var nycd = L.geoJson(nycdData, {style: nycdStyle}).addTo(map1);
@@ -224,7 +276,13 @@
     info.updateAll = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') : '<h5>Hover over/Click a Neighborhood</h5>');
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') : '<h5>Hover over a Neighborhood</h5>');
+    };
+
+    infoClick.updateAll = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') : '<h5>Click a Neighborhood</h5>');
     };
 
     function getAllColor(d,k) {
@@ -242,7 +300,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
@@ -272,12 +330,25 @@
 
     function resetHighlightAll(e) {
         all.resetStyle(e.target);
-        // info.updateAll();
+        // all.setStyle ( allStyle(e.target) );
     }
 
+    var prelayer;
+
     function zoomToFeatureAll(e) {
-        map1.fitBounds(e.target.getBounds());
-        
+        var layer = e.target;
+        map1.fitBounds(layer.getBounds());
+        // all.resetStyle(prelayer);
+      
+        layer.setStyle({
+            weight: 3,
+            color: 'red',
+            dashArray: '',
+            fillOpacity: 0.6
+        });
+
+        infoClick.updateAll(layer.feature.properties);
+        // prelayer = layer
     } 
 
     legend.onAdd = function (map) {
@@ -312,6 +383,14 @@
 
     info.addTo(map1);
 
+    infoClick.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info click');
+      this.updateAll(); 
+      return this._div;
+    };
+
+    // infoClick.addTo(map1);
+
 
     //Spanish Layer
 
@@ -321,7 +400,7 @@
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getSpanishColor(props.lgsplepp, props.bndrytype) + '"></i> ' + 
         '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgsplepp + '%')
-          : '<h4>Hover over/Click a Neighborhood</h4>');
+          : '<h4>Hover over a Neighborhood</h4>');
     };
 
     function getSpanishColor(d,k) {
@@ -339,7 +418,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
@@ -384,7 +463,7 @@
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getFrenchCrColor(props.lgfrcrlepp, props.bndrytype) + '"></i> ' + 
         '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgfrcrlepp + '%')
-          : '<h4>Hover over/Click a Neighborhood</h4>');
+          : '<h4>Hover over a Neighborhood</h4>');
     };
 
     function getFrenchCrColor(d,k) {
@@ -402,7 +481,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
@@ -447,7 +526,7 @@
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getItalianColor(props.lgitlepp, props.bndrytype) + '"></i> ' + 
         '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgitlepp + '%')
-          : '<h4>Hover over/Click a Neighborhood</h4>');
+          : '<h4>Hover over a Neighborhood</h4>');
     };
 
     function getItalianColor(d,k) {
@@ -465,7 +544,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
@@ -510,7 +589,7 @@
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getRussianColor(props.lgruslepp, props.bndrytype) + '"></i> ' + 
         '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgruslepp + '%')
-          : '<h4>Hover over/Click a Neighborhood</h4>');
+          : '<h4>Hover over a Neighborhood</h4>');
     };
 
     function getRussianColor(d,k) {
@@ -528,7 +607,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
@@ -573,7 +652,7 @@
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getChineseColor(props.lgchilepp, props.bndrytype) + '"></i> ' + 
         '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgchilepp + '%')
-          : '<h4>Hover over/Click a Neighborhood</h4>');
+          : '<h4>Hover over a Neighborhood</h4>');
     };
 
     function getChineseColor(d,k) {
@@ -591,7 +670,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
@@ -636,7 +715,7 @@
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getKoreanColor(props.lgkorlepp, props.bndrytype) + '"></i> ' + 
         '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgkorlepp + '%')
-          : '<h4>Hover over/Click a Neighborhood</h4>');
+          : '<h4>Hover over a Neighborhood</h4>');
     };
 
     function getKoreanColor(d,k) {
@@ -654,7 +733,7 @@
       weight: .5,
       opacity: 1,
       fillOpacity: 0.5,
-      color: 'white'
+      color: 'grey'
       };
     }
 
