@@ -61,8 +61,8 @@
     }
 
     .info {
-      width: 320px;
-      height: 600px;
+      width: 385px;
+      height: 5 0px;
       padding: 6px 8px;
       font: 14px/16px Arial, Helvetica, sans-serif;
       background: white;
@@ -85,15 +85,15 @@
       height: 18px;
       float: left;
       margin-right: 20px;
-      margin-left: 100px;
-      opacity: 0.7;
-      outline: black solid thin;
+      margin-left: 50px;
+      opacity: 0.5;
+      outline: grey solid thin;
       margin-top: 5px;
     }
 
     .legend {
       width: 385px;
-      height: 140px;
+      height: 200px;
       text-align: left;
       line-height: 18px;
     }
@@ -103,10 +103,10 @@
       height: 18px;
       float: left;
       margin-right: 20px;
-      margin-left: 140px;
+      margin-left: 50px;
       margin-top: auto;
-      opacity: 0.7;
-      outline: black solid thin;
+      opacity: 0.5;
+      outline: grey solid thin;
     }
 
 
@@ -138,7 +138,7 @@
             <li class="dropdown">
               <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="data/boroughs.geojson" download="boroughs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Download the Data</a></li>
+                <li><a href="data/nta_lap_exported.geojson.json" download="nta_lap.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Download the Data</a></li>
               </ul>
             </li>
             <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Sidebar</a></li>
@@ -174,6 +174,7 @@
     <!-- <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="data/nta_lap_exported.geojson.json"></script>
+    <script src="data/nycd.geojson.json"></script>
     <!-- <script src="js/leaflet-sidebar.js"></script>  -->
     <script>
 
@@ -186,38 +187,49 @@
 
     // var sidebar = L.control.sidebar('sidebar').addTo(map1);
     
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    }).addTo(map1);
-
-    // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    // attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    // maxZoom: 18,
-    // id: 'nycedcmisgis.ndh346pj',
-    // accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
+    // L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+    //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
     // }).addTo(map1);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'nycedcmisgis.ndh346pj',
+    accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
+    }).addTo(map1);
 
     var info = L.control({position: 'topleft'});
 
-    info.onAdd = function (map) {
-      this._div = L.DomUtil.create('div', 'info');
-      this.updateAll();
-      return this._div;
-    };
-
     var legend = L.control({position: 'topleft'});
+
+    //add Community District Boundary
+    var nycd = L.geoJson(nycdData, {style: nycdStyle}).addTo(map1);
+
+    function nycdStyle(feature) {
+      return {
+      // fillColor: getAllColor(feature.properties.lgoenglepp, feature.properties.bndrytype),
+      weight: 3,
+      opacity: 1,
+      dashArray: '5',
+      // fillOpacity: 0.5,
+      color: 'black'
+      };
+    }
+
 
     //default All layer
 
     var all = L.geoJson(mapData, {style: allStyle, onEachFeature: onEachFeatureAll}).addTo(map1);
 
     info.updateAll = function (props) {
-      this._div.innerHTML =   (props ? '<i style="background:' + getAllColor(props.lgoenglepp) + '"></i> ' + '<b>' + props.ntaname + '</b><br />' + (props.lgoenglepp === 0 ? 'N/A' : props.lgoenglepp + '%') 
-        : '<h4>Click a Neighborhood</h4>');
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') : '<h5>Hover over/Click a Neighborhood</h5>');
     };
 
     function getAllColor(d,k) {
-      return k != 'NTA'? '#969696':
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
       d <= 10 ? '#fef0d9':
       d <= 25 ? '#fdcc8a':
       d <= 50 ? '#fc8d59':
@@ -229,33 +241,33 @@
       fillColor: getAllColor(feature.properties.lgoenglepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureAll(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureAll,
             mouseout: resetHighlightAll,
             click: zoomToFeatureAll
         });
     }
 
-    function highlightFeature(e) {
+    function highlightFeatureAll(e) {
       var layer = e.target;
     
       layer.setStyle({
           weight: 3,
           color: 'white',
           dashArray: '',
-          fillOpacity: 0.8
+          fillOpacity: 0.6
       });
 
       if (!L.Browser.ie && !L.Browser.opera) {
               layer.bringToFront();
           }
-      // info.updateAll(layer.feature.properties);
+      info.updateAll(layer.feature.properties);
     } 
 
     function resetHighlightAll(e) {
@@ -284,7 +296,7 @@
           from + (to ? '% &ndash; ' + to + '%' : '% +') );
       }
 
-      divAll.innerHTML = "<h5>All - Speak English Less Than 'Very Well'</h5>" + '<i style="background:' + getAllColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsAll.join('<br>');
+      divAll.innerHTML = "<h5>All - Speak English Less Than 'Very Well'</h5>" + '<i style= "outline: thin black dashed; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getAllColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getAllColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsAll.join('<br>');
                 
       return divAll;
     };
@@ -292,12 +304,29 @@
     legend.addTo(map1);
 
 
+    info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info');
+      this.updateAll();
+      return this._div;
+    };
+
+    info.addTo(map1);
+
+
     //Spanish Layer
 
     var spanish = L.geoJson(mapData, {style: spanishStyle, onEachFeature: onEachFeatureSpanish});
 
+    info.updateSpanish = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getSpanishColor(props.lgsplepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgsplepp + '%')
+          : '<h4>Hover over/Click a Neighborhood</h4>');
+    };
+
     function getSpanishColor(d,k) {
-      return k != 'NTA'? '#969696':
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
       d <= 5 ? '#edf8fb':
       d <= 15 ? '#b3cde3':
       d <= 25 ? '#8c96c6':
@@ -309,18 +338,34 @@
       fillColor: getSpanishColor(feature.properties.lgsplepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureSpanish(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureSpanish,
             mouseout: resetHighlightSpanish,
             click: zoomToFeatureSpanish
         });
     }
+
+    function highlightFeatureSpanish(e) {
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.6
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      info.updateSpanish(layer.feature.properties);
+    } 
 
     function resetHighlightSpanish(e) {
         spanish.resetStyle(e.target);
@@ -328,15 +373,23 @@
 
     function zoomToFeatureSpanish(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        info.updateSpanish(layer.feature.properties);
     }
 
     //French Creole Layer
 
     var frenchCreole = L.geoJson(mapData, {style: frenchCrStyle, onEachFeature: onEachFeatureFrenchCr});
 
+    info.updateFrenchCr = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getFrenchCrColor(props.lgfrcrlepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgfrcrlepp + '%')
+          : '<h4>Hover over/Click a Neighborhood</h4>');
+    };
+
     function getFrenchCrColor(d,k) {
-      return k != 'NTA'? '#969696':
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
       d <= 0.5 ? '#feebe2':
       d <= 2.5 ? '#fbb4b9':
       d <= 4.5 ? '#f768a1':
@@ -348,18 +401,34 @@
       fillColor: getFrenchCrColor(feature.properties.lgfrcrlepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureFrenchCr(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureFrenchCr,
             mouseout: resetHighlightFrenchCr,
             click: zoomToFeatureFrenchCr
         });
     }
+
+    function highlightFeatureFrenchCr(e) {
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.6
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      info.updateFrenchCr(layer.feature.properties);
+    } 
 
     function resetHighlightFrenchCr(e) {
         frenchCreole.resetStyle(e.target);
@@ -367,19 +436,27 @@
 
     function zoomToFeatureFrenchCr(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        info.updateFrenchCr(layer.feature.properties);
     }
 
     //Italian Layer
 
     var italian = L.geoJson(mapData, {style: italianStyle, onEachFeature: onEachFeatureItalian});
 
+    info.updateItalian = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getItalianColor(props.lgitlepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgitlepp + '%')
+          : '<h4>Hover over/Click a Neighborhood</h4>');
+    };
+
     function getItalianColor(d,k) {
-      return k != 'NTA'? '#969696':
-      d <= 0.5 ? '#ffffcc':
-      d <= 1 ? '#c2e699':
-      d <= 2 ? '#78c679':
-      '#238443';
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
+      d <= 0.5 ? '#fee5d9':
+      d <= 1 ? '#fcae91':
+      d <= 2 ? '#fb6a4a':
+      '#cb181d';
     }
 
     function italianStyle(feature) {
@@ -387,18 +464,34 @@
       fillColor: getItalianColor(feature.properties.lgitlepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureItalian(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureItalian,
             mouseout: resetHighlightItalian,
             click: zoomToFeatureItalian
         });
     }
+
+    function highlightFeatureItalian(e) {
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.6
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      info.updateItalian(layer.feature.properties);
+    } 
 
     function resetHighlightItalian(e) {
         italian.resetStyle(e.target);
@@ -406,15 +499,23 @@
 
     function zoomToFeatureItalian(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        info.updateItalian(layer.feature.properties);
     }
 
     //Russian Layer
 
     var russian = L.geoJson(mapData, {style: russianStyle, onEachFeature: onEachFeatureRussian});
 
+    info.updateRussian = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getRussianColor(props.lgruslepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgruslepp + '%')
+          : '<h4>Hover over/Click a Neighborhood</h4>');
+    };
+
     function getRussianColor(d,k) {
-      return k != 'NTA'? '#969696':
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
       d <= 2 ? '#fee5d9':
       d <= 10 ? '#fcae91':
       d <= 20 ? '#fb6a4a':
@@ -426,18 +527,34 @@
       fillColor: getRussianColor(feature.properties.lgruslepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureRussian(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureRussian,
             mouseout: resetHighlightRussian,
             click: zoomToFeatureRussian
         });
     }
+
+    function highlightFeatureRussian(e) {
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.6
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      info.updateRussian(layer.feature.properties);
+    } 
 
     function resetHighlightRussian(e) {
         russian.resetStyle(e.target);
@@ -445,19 +562,27 @@
 
     function zoomToFeatureRussian(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        info.updateRussian(layer.feature.properties);
     }
 
     //Chinese Layer
 
     var chinese = L.geoJson(mapData, {style: chineseStyle, onEachFeature: onEachFeatureChinese});
-  
+    
+    info.updateChinese = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getChineseColor(props.lgchilepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgchilepp + '%')
+          : '<h4>Hover over/Click a Neighborhood</h4>');
+    };
+
     function getChineseColor(d,k) {
-      return k != 'NTA'? '#969696':
-      d <= 3 ? '#ffffcc':
-      d <= 10 ? '#a1dab4':
-      d <= 20 ? '#41b6c4':
-      '#225ea8';
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
+      d <= 3 ? '#f1eef6':
+      d <= 10 ? '#bdc9e1':
+      d <= 20 ? '#74a9cf':
+      '#0570b0';
     }
 
     function chineseStyle(feature) {
@@ -465,18 +590,34 @@
       fillColor: getChineseColor(feature.properties.lgchilepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureChinese(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureChinese,
             mouseout: resetHighlightChinese,
             click: zoomToFeatureChinese
         });
     }
+
+    function highlightFeatureChinese(e) {
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.6
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      info.updateChinese(layer.feature.properties);
+    } 
 
     function resetHighlightChinese(e) {
         chinese.resetStyle(e.target);
@@ -484,15 +625,23 @@
 
     function zoomToFeatureChinese(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        info.updateChinese(layer.feature.properties);
     }
 
     //Korean Layer
 
     var korean = L.geoJson(mapData, {style: koreanStyle, onEachFeature: onEachFeatureKorean});
 
+    info.updateKorean = function (props) {
+      this._div.innerHTML =   (props ? 
+        // '<i style="background:' + getKoreanColor(props.lgkorlepp, props.bndrytype) + '"></i> ' + 
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgkorlepp + '%')
+          : '<h4>Hover over/Click a Neighborhood</h4>');
+    };
+
     function getKoreanColor(d,k) {
-      return k != 'NTA'? '#969696':
+      return k === 'Airport/Non-Park'? '#969696':
+      k === 'Parks'? '#bae4b3':
       d <= 0.5 ? '#f1eef6':
       d <= 2 ? '#d7b5d8':
       d <= 5 ? '#df65b0':
@@ -504,18 +653,34 @@
       fillColor: getKoreanColor(feature.properties.lgkorlepp, feature.properties.bndrytype),
       weight: .5,
       opacity: 1,
-      fillOpacity: 0.7,
+      fillOpacity: 0.5,
       color: 'white'
       };
     }
 
     function onEachFeatureKorean(feature, layer) {
         layer.on({
-            mouseover: highlightFeature,
+            mouseover: highlightFeatureKorean,
             mouseout: resetHighlightKorean,
             click: zoomToFeatureKorean
         });
     }
+
+    function highlightFeatureKorean(e) {
+      var layer = e.target;
+    
+      layer.setStyle({
+          weight: 3,
+          color: 'white',
+          dashArray: '',
+          fillOpacity: 0.6
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera) {
+              layer.bringToFront();
+          }
+      info.updateKorean(layer.feature.properties);
+    } 
 
     function resetHighlightKorean(e) {
         korean.resetStyle(e.target);
@@ -523,7 +688,7 @@
 
     function zoomToFeatureKorean(e) {
         map1.fitBounds(e.target.getBounds());
-        info.updateAll(layer.feature.properties);
+        info.updateKorean(layer.feature.properties);
     }
 
 
@@ -558,7 +723,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getAllColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsAll.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getAllColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getAllColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsAll.join('<br>');
         } 
 
       
@@ -577,7 +742,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getSpanishColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsSpanish.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getSpanishColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getSpanishColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsSpanish.join('<br>');
         }
 
       else if (eventLayer.name === "French Creole - Speak English Less Than 'Very Well'") {
@@ -595,7 +760,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getFrenchCrColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsFrenchCr.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getFrenchCrColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getFrenchCrColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsFrenchCr.join('<br>');
         } 
 
       else if (eventLayer.name === "Italian - Speak English Less Than 'Very Well'") {
@@ -613,7 +778,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getItalianColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsItalian.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getItalianColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getItalianColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsItalian.join('<br>');
         } 
 
       else if (eventLayer.name === "Russian - Speak English Less Than 'Very Well'") {
@@ -631,7 +796,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getRussianColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsRussian.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getRussianColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getRussianColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsRussian.join('<br>');
         } 
 
       else if (eventLayer.name === "Chinese - Speak English Less Than 'Very Well'") {
@@ -649,7 +814,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getChineseColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsChinese.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getChineseColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getChineseColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsChinese.join('<br>');
         } 
 
       else if (eventLayer.name === "Korean - Speak English Less Than 'Very Well'") {
@@ -667,7 +832,7 @@
             from + (to ? '% &ndash; ' + to + '%' : '% +') );
         }
 
-        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style="background:' + getKoreanColor(0, "N/A") + '"></i> ' + 'N/A' + '<br>' + labelsKorean.join('<br>');
+        legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getKoreanColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getKoreanColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsKorean.join('<br>');
         }  
  
     });
