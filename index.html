@@ -75,7 +75,7 @@
     }
 
     .info {
-      width: 385px;
+      width: 410px;
       height: 60px;
       padding: 6px 8px;
       font: 14px/16px Arial, Helvetica, sans-serif;
@@ -106,7 +106,7 @@
     }
 
     .click {
-      width: 385px;
+      width: 410px;
       height: 240px;
       padding: 6px 8px;
       font: 14px/16px Arial, Helvetica, sans-serif;
@@ -126,8 +126,8 @@
     }
 
     .legend {
-      width: 385px;
-      height: 200px;
+      width: 410px;
+      height: 194px;
       text-align: left;
       line-height: 18px;
     }
@@ -172,7 +172,7 @@
             <li class="dropdown">
               <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="data/nta_lap_exported.geojson.json" download="nta_lap.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Download the Data</a></li>
+                <li><a href="data/nta_lap_V2.geojson.json" download="nta_lap.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Download the Data</a></li>
               </ul>
             </li>
             <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Sidebar</a></li>
@@ -225,7 +225,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="data/nta_lap_exported.geojson.json"></script>
+    <script src="data/nta_lap_V2.geojson.json"></script>
     <script src="data/nycd.geojson.json"></script>
     <!-- <script src="js/leaflet-sidebar.js"></script>  -->
     <script>
@@ -276,13 +276,15 @@
     info.updateAll = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') : '<h5>Hover over a Neighborhood</h5>');
+        '<b>' + props.ntaname + '</b><br />' + "All - Speak English Less Than 'Very Well'  <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%</h5>') : '<h5>Hover over a Neighborhood</h5>');
     };
 
+    //language_top, language_second, language_pct_top, language_pct_moe_top
+
     infoClick.updateAll = function (props) {
-      this._div.innerHTML =   (props ? 
+      this._div.innerHTML =  (props ? 
         // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') : '<h5>Click a Neighborhood</h5>');
+        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%') + '<div id="ntaChart"><svg></svg></div>' : '<h5>Click a Neighborhood</h5>');
     };
 
     function getAllColor(d,k) {
@@ -389,7 +391,7 @@
       return this._div;
     };
 
-    // infoClick.addTo(map1);
+    infoClick.addTo(map1);
 
 
     //Spanish Layer
@@ -399,8 +401,7 @@
     info.updateSpanish = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getSpanishColor(props.lgsplepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgsplepp + '%')
-          : '<h4>Hover over a Neighborhood</h4>');
+        '<b>' + props.ntaname + '</b><br />' + "Spanish - Speak English Less Than 'Very Well' <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgsplepp + '%</h5>') : '<h5>Hover over a Neighborhood</h5>');
     };
 
     function getSpanishColor(d,k) {
@@ -462,8 +463,7 @@
     info.updateFrenchCr = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getFrenchCrColor(props.lgfrcrlepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgfrcrlepp + '%')
-          : '<h4>Hover over a Neighborhood</h4>');
+        '<b>' + props.ntaname + '</b><br />' + "French Creole - Speak English Less Than 'Very Well' <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgfrcrlepp + '%</h5>') : '<h5>Hover over a Neighborhood</h5>');
     };
 
     function getFrenchCrColor(d,k) {
@@ -525,8 +525,7 @@
     info.updateItalian = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getItalianColor(props.lgitlepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgitlepp + '%')
-          : '<h4>Hover over a Neighborhood</h4>');
+        '<b>' + props.ntaname + '</b><br />' + "Italian - Speak English Less Than 'Very Well' <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgitlepp + '%</h5>') : '<h5>Hover over a Neighborhood</h5>');
     };
 
     function getItalianColor(d,k) {
@@ -588,8 +587,8 @@
     info.updateRussian = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getRussianColor(props.lgruslepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgruslepp + '%')
-          : '<h4>Hover over a Neighborhood</h4>');
+        '<b>' + props.ntaname + '</b><br />' + "Russian - Speak English Less Than 'Very Well' <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgruslepp + '%</h5>')
+          : '<h5>Hover over a Neighborhood</h5>');
     };
 
     function getRussianColor(d,k) {
@@ -651,8 +650,8 @@
     info.updateChinese = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getChineseColor(props.lgchilepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgchilepp + '%')
-          : '<h4>Hover over a Neighborhood</h4>');
+        '<b>' + props.ntaname + '</b><br />' + "Chinese - Speak English Less Than 'Very Well' <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgchilepp + '%</h5>')
+          : '<h5>Hover over a Neighborhood</h5>');
     };
 
     function getChineseColor(d,k) {
@@ -714,8 +713,8 @@
     info.updateKorean = function (props) {
       this._div.innerHTML =   (props ? 
         // '<i style="background:' + getKoreanColor(props.lgkorlepp, props.bndrytype) + '"></i> ' + 
-        '<b>' + props.ntaname + '</b><br />' + (props.bndrytype != 'NTA' ? 'N/A' : props.lgkorlepp + '%')
-          : '<h4>Hover over a Neighborhood</h4>');
+        '<b>' + props.ntaname + '</b><br />' + "Korean - Speak English Less Than 'Very Well' <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgkorlepp + '%</h5>')
+          : '<h5>Hover over a Neighborhood</h5>');
     };
 
     function getKoreanColor(d,k) {
