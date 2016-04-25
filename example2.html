@@ -1,0 +1,127 @@
+<html>
+<head>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="./js/nv.d3.js"></script>
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
+
+  <script src="./js/script.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+  <link href='styles.css' rel='stylesheet' type='text/css'>
+
+  <script>
+  
+
+  </script>
+</head>
+
+<body onload="init()">
+  <div id='header'>
+    <div id='title'>
+      <h1>NYC Elementary School State Test Performance</h1>
+    </div>
+        <a href = "https://cwhong.cartodb.com/tables/nycelementaryschoolscoresandzoneswithmean" id="getDataButton"><img src='https://raw.githubusercontent.com/betanyc/getDataButton/master/png/110x32.png'></a>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://chriswhong.github.io/nycSchools/" data-text="View NYC Elementary School Zones and Scores on an Interactive Web Map" data-via="chris_whong">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  </div>
+  <div id='map'></div>
+  
+  <div class='sidebar mainSidebar'>
+    <h4 class='schoolName'>Hover over the map to see performance data</h4>
+    <div class='meanItem'>
+      <div class='meanLabel'>Math Mean:</div>
+      <div class = "mathMean mean"></div>
+    </div>
+      <div class='meanItem'>
+      <div class='meanLabel'>ELA Mean:</div>  
+      <div class = "elaMean mean"></div>
+    </div>
+    <div id="chartContainer">
+    Students tested (Math/ELA): <div id="studentsTested"></div> 
+    </div>
+    <div id="chartContainer">
+    <div>% of total students tested by <a href = "http://www.p12.nysed.gov/irs/ela-math/2014/2014-ELADefinitionsofPerformanceLevels.pdf">performance level</a></div>
+   
+    <div id="mathChart"><svg></svg></div>
+   
+    <div id="elaChart">
+  <svg></svg>
+</div>
+</div>
+  </div>
+  <div class="sidebar noData" style="display:none">
+    <h4>No Data for this Area</h4>
+    <p>This area might not have a zoned elementary school, or may not be residential</p>
+  </div>
+  <!-- //legend -->
+ <!--  <div class='cartodb-legend choropleth'> 
+<div class="legend-title">Mean 2014 Math Score - Grades 3-4-5</div>
+
+
+<ul>
+  
+  
+  <li class="min">
+
+
+    275
+  
+  
+  </li>
+  
+  
+  <li class="max">
+
+
+    357
+  
+  
+  </li>
+  
+  
+  <li class="graph count_441">
+
+
+  <div class="colors">
+  <div class="quartile" style="background-color:#ECF0F6"></div>
+  <div class="quartile" style="background-color:#B2C2DB"></div>
+  <div class="quartile" style="background-color:#9BB0D0"></div>
+  <div class="quartile" style="background-color:#849EC5"></div>
+  <div class="quartile" style="background-color:#6182B5"></div>
+  <div class="quartile" style="background-color:#4E71A6"></div>
+  <div class="quartile" style="background-color:#43618F"></div>
+  </div>
+  
+  
+  </li>
+  
+  <div style="width:30px; 
+              height:20px; 
+              margin-top:10px; 
+              background-color:#FFA300; 
+              border: 1px solid #b3b3b3; 
+              -webkit-border-radius: 3px;
+              -moz-border-radius: 3px;
+              -ms-border-radius: 3px;
+              -o-border-radius: 3px;
+              border-radius: 3px; 
+              display:inline-block
+ ">
+
+
+
+  
+  </div> <div style="  display: inline-block;
+    position: relative;
+  top: -6px;
+  left: 4px;">No Data Available</div>
+  
+
+
+</ul>
+
+
+</div> -->
+</body>
+</html>
