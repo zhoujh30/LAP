@@ -114,7 +114,7 @@ function resetHighlightAll(e) {
 
 function zoomToFeatureAll(e) {
     var layer = e.target;
-    map1.fitBounds(layer.getBounds());
+    // map1.fitBounds(layer.getBounds());
   
     layer.setStyle({
         weight: 3,
@@ -156,19 +156,19 @@ function zoomToFeatureAll(e) {
         values: [
           { 
             "label" : props.language_top.split("-")[0],
-            "value" : (100*props.language_pct_top).toFixed(1)
+            "value" : (100*props.language_pct_top).toFixed(2)
           } , 
           { 
             "label" : props.language_second.split("-")[0], 
-            "value" : (100*props.language_pct_second).toFixed(1)
+            "value" : (100*props.language_pct_second).toFixed(2)
           } , 
           { 
             "label" : props.language_third.split("-")[0], 
-            "value" : (100*props.language_pct_third).toFixed(1)
+            "value" : (100*props.language_pct_third).toFixed(2)
           } , 
           { 
             "label" : props.language_fourth.split("-")[0], 
-            "value" : (100*props.language_pct_fourth).toFixed(1)
+            "value" : (100*props.language_pct_fourth).toFixed(2)
           } 
           // , 
           // { 
