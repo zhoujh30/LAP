@@ -134,14 +134,17 @@ function zoomToFeatureAll(e) {
         .x(function(d) { return d.label })    //Specify the data accessors.
         .y(function(d) { return d.value })
         .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
-        .tooltips(true)        //Don't show tooltips
+        // .wrapLabels(true)
+        .tooltips(false)        //Don't show tooltips
         .showValues(true)       //...instead, show the bar value right on top of each bar.
         .showYAxis(false)
+        .duration(500)
         .margin({left:0,right:0})
         .color(['rgb(215,25,28)','rgb(253,174,97)','rgb(166,217,106)','rgb(26,150,65)'])
         .valueFormat(function(d){
           return d + "%";
         })
+        // .showlegend(true)
         ;
 
     d3.select('#ntaChart svg')
