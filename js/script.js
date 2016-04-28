@@ -50,12 +50,6 @@ info.updateAll = function (props) {
 
 infoClick.updateAll = function (props) {
 
-  // top = (100*props.language_pct_top).toFixed(1);
-  // second = (100*props.language_pct_second).toFixed(1);
-  // third = (100*props.language_pct_third).toFixed(1);
-  // fourth = (100*props.language_pct_fourth).toFixed(1);
-  // fifth = (100*props.language_pct_fifth).toFixed(1);
-
   this._div.innerHTML =  (props ?   
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
     '<b>' + props.ntaname + '</b><br/>Speak English Less Than "Very Well"' 
@@ -115,7 +109,6 @@ function resetHighlightAll(e) {
 function zoomToFeatureAll(e) {
     var layer = e.target;
     // map1.fitBounds(layer.getBounds());
-  
     layer.setStyle({
         weight: 3,
         color: 'red',
@@ -123,27 +116,24 @@ function zoomToFeatureAll(e) {
         fillOpacity: 0.6
     });
     props = layer.feature.properties;
-    // window.top = props.language_pct_top;
-    // console.log(window.top);
-
-    // console.log(layer.feature.properties.language_pct_top)
     infoClick.updateAll(props);
 
     nv.addGraph(function() {
     var ntaChart = nv.models.discreteBarChart()
         .x(function(d) { return d.label })    //Specify the data accessors.
         .y(function(d) { return d.value })
-        .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
-        // .wrapLabels(true)
-        .tooltips(false)        //Don't show tooltips
+        .wrapLabels(true)
+        // .tooltips(false)        //Don't show tooltips
         .showValues(true)       //...instead, show the bar value right on top of each bar.
         .showYAxis(false)
         .duration(500)
-        .margin({left:0,right:0})
-        .color(['rgb(215,25,28)','rgb(253,174,97)','rgb(166,217,106)','rgb(26,150,65)'])
+        .margin({left:10,right:10})
+        // .width(222)
+        .color(['rgb(27,158,119)','rgb(217,95,2)','rgb(117,112,179)','rgb(231,41,138)'])
         .valueFormat(function(d){
           return d + "%";
         })
+        // .rotateLabels(-20)
         // .showlegend(true)
         ;
 
@@ -164,19 +154,19 @@ function zoomToFeatureAll(e) {
         values: [
           { 
             "label" : props.language_top.split("-")[0],
-            "value" : (100*props.language_pct_top).toFixed(2)
+            "value" : (100*parseFloat(props.language_pct_top)).toFixed(2)
           } , 
           { 
             "label" : props.language_second.split("-")[0], 
-            "value" : (100*props.language_pct_second).toFixed(2)
+            "value" : (100*parseFloat(props.language_pct_second)).toFixed(2)
           } , 
           { 
             "label" : props.language_third.split("-")[0], 
-            "value" : (100*props.language_pct_third).toFixed(2)
+            "value" : (100*parseFloat(props.language_pct_third)).toFixed(2)
           } , 
           { 
             "label" : props.language_fourth.split("-")[0], 
-            "value" : (100*props.language_pct_fourth).toFixed(2)
+            "value" : (100*parseFloat(props.language_pct_fourth)).toFixed(2)
           } 
           // , 
           // { 
