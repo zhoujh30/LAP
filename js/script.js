@@ -54,7 +54,7 @@ infoClick.updateAll = function (props) {
 
   this._div.innerHTML =  (props ?   
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
-    '<b>' + props.ntaname + '</b><br/>Speak English Less Than "Very Well"'  
+    '<b>' + props.ntaname + '</b><br/><br/>Speak English Less Than "Very Well"'  
     // + (props.bndrytype != 'NTA' ? 'N/A' : props.language_top + '</b><br /><h5>' +  top + '%' + '  +/-  ' + props.language_pct_moe_top + '%</h5>') 
     + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: ' + props.lgoenglepp + '%</b><br/><br/>Top Four Languages<br/><div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
 
