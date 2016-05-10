@@ -43,7 +43,9 @@ var all = L.geoJson(mapData, {style: allStyle, onEachFeature: onEachFeatureAll})
 info.updateAll = function (props) {
   this._div.innerHTML =   (props ? 
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
-    '<b>' + props.ntaname + '</b><br />' + "All - Speak English Less Than 'Very Well'  <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%</h5>') : '<h5>Hover over a Neighborhood</h5>');
+    '<b>' + props.ntaname + '</b>'
+    // + '</b><br />' + "All - Speak English Less Than 'Very Well'  <h5>" + (props.bndrytype != 'NTA' ? 'N/A' : props.lgoenglepp + '%</h5>') 
+    : '<h5>Hover over a Neighborhood</h5>');
 };
 
 //language_top, language_second, language_pct_top, language_pct_moe_top
@@ -52,9 +54,9 @@ infoClick.updateAll = function (props) {
 
   this._div.innerHTML =  (props ?   
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
-    '<b>' + props.ntaname + '</b><br/>Speak English Less Than "Very Well"' 
+    '<b>' + props.ntaname + '</b><br/>Speak English Less Than "Very Well"'  
     // + (props.bndrytype != 'NTA' ? 'N/A' : props.language_top + '</b><br /><h5>' +  top + '%' + '  +/-  ' + props.language_pct_moe_top + '%</h5>') 
-    + (props.bndrytype != 'NTA' ? '<br/><br/>N/A' :'<div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
+    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: ' + props.lgoenglepp + '%</b><br/><br/>Top Four Languages<br/><div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
 
 };
 
@@ -135,6 +137,7 @@ function zoomToFeatureAll(e) {
         })
         // .rotateLabels(-20)
         // .showlegend(true)
+        // .tooltips=(false)
         ;
 
     d3.select('#ntaChart svg')
@@ -154,19 +157,19 @@ function zoomToFeatureAll(e) {
         values: [
           { 
             "label" : props.language_top.split("-")[0],
-            "value" : (100*parseFloat(props.language_pct_top)).toFixed(2)
+            "value" : (parseFloat(props.language_pct_top)*100).toFixed(1)
           } , 
           { 
             "label" : props.language_second.split("-")[0], 
-            "value" : (100*parseFloat(props.language_pct_second)).toFixed(2)
+            "value" : (parseFloat(props.language_pct_second)*100).toFixed(1)
           } , 
           { 
             "label" : props.language_third.split("-")[0], 
-            "value" : (100*parseFloat(props.language_pct_third)).toFixed(2)
+            "value" : (parseFloat(props.language_pct_third)*100).toFixed(1)
           } , 
           { 
             "label" : props.language_fourth.split("-")[0], 
-            "value" : (100*parseFloat(props.language_pct_fourth)).toFixed(2)
+            "value" : (parseFloat(props.language_pct_fourth)*100).toFixed(1)
           } 
           // , 
           // { 
@@ -253,7 +256,7 @@ function spanishStyle(feature) {
 
 function onEachFeatureSpanish(feature, layer) {
     layer.on({
-        mouseover: highlightFeatureSpanish,
+        mouseover: highlightFeatureAll,
         mouseout: resetHighlightSpanish,
         click: zoomToFeatureAll
     });
@@ -315,7 +318,7 @@ function frenchCrStyle(feature) {
 
 function onEachFeatureFrenchCr(feature, layer) {
     layer.on({
-        mouseover: highlightFeatureFrenchCr,
+        mouseover: highlightFeatureAll,
         mouseout: resetHighlightFrenchCr,
         click: zoomToFeatureAll
     });
@@ -377,7 +380,7 @@ function italianStyle(feature) {
 
 function onEachFeatureItalian(feature, layer) {
     layer.on({
-        mouseover: highlightFeatureItalian,
+        mouseover: highlightFeatureAll,
         mouseout: resetHighlightItalian,
         click: zoomToFeatureAll
     });
@@ -440,7 +443,7 @@ function russianStyle(feature) {
 
 function onEachFeatureRussian(feature, layer) {
     layer.on({
-        mouseover: highlightFeatureRussian,
+        mouseover: highlightFeatureAll,
         mouseout: resetHighlightRussian,
         click: zoomToFeatureAll
     });
@@ -503,7 +506,7 @@ function chineseStyle(feature) {
 
 function onEachFeatureChinese(feature, layer) {
     layer.on({
-        mouseover: highlightFeatureChinese,
+        mouseover: highlightFeatureAll,
         mouseout: resetHighlightChinese,
         click: zoomToFeatureAll
     });
@@ -566,7 +569,7 @@ function koreanStyle(feature) {
 
 function onEachFeatureKorean(feature, layer) {
     layer.on({
-        mouseover: highlightFeatureKorean,
+        mouseover: highlightFeatureAll,
         mouseout: resetHighlightKorean,
         click: zoomToFeatureAll
     });
@@ -608,7 +611,7 @@ var baselayMaps = {
   "Korean - Speak English Less Than 'Very Well'": korean
 };
 
-L.control.layers(baselayMaps).addTo(map1); 
+L.control.layers(baselayMaps, null, {collapsed:false}).addTo(map1); 
 
 
 //Legend Change
