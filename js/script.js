@@ -56,7 +56,7 @@ infoClick.updateAll = function (props) {
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
     '<b>' + props.ntaname + '</b><br/><br/>Speak English Less Than "Very Well"'  
     // + (props.bndrytype != 'NTA' ? 'N/A' : props.language_top + '</b><br /><h5>' +  top + '%' + '  +/-  ' + props.language_pct_moe_top + '%</h5>') 
-    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: ' + props.lgoenglepp + '%</b><br/><br/>Top Four Languages<br/><div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
+    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: ' + props.lgoenglepp + '%</b><br/><br/>Top Languages<br/><div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
 
 };
 
@@ -200,7 +200,7 @@ legend.onAdd = function (map) {
       from + (to ? '% &ndash; ' + to + '%' : '% +') );
   }
 
-  divAll.innerHTML = "<h5>All - Speak English Less Than 'Very Well'</h5>" + '<i style= "outline: thin black dashed; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getAllColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getAllColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsAll.join('<br>');
+  divAll.innerHTML = "<h5>All - Speak English Less Than 'Very Well'</h5>" + '<i style= "outline: thin black dashed; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getAllColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getAllColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsAll.join('<br>');
             
   return divAll;
 };
@@ -632,7 +632,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getAllColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getAllColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsAll.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getAllColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getAllColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsAll.join('<br>');
     } 
 
   
@@ -651,7 +651,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getSpanishColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getSpanishColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsSpanish.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getSpanishColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getSpanishColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsSpanish.join('<br>');
     }
 
   else if (eventLayer.name === "French Creole - Speak English Less Than 'Very Well'") {
@@ -669,7 +669,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getFrenchCrColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getFrenchCrColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsFrenchCr.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getFrenchCrColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getFrenchCrColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsFrenchCr.join('<br>');
     } 
 
   else if (eventLayer.name === "Italian - Speak English Less Than 'Very Well'") {
@@ -687,7 +687,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getItalianColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getItalianColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsItalian.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getItalianColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getItalianColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsItalian.join('<br>');
     } 
 
   else if (eventLayer.name === "Russian - Speak English Less Than 'Very Well'") {
@@ -705,7 +705,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getRussianColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getRussianColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsRussian.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getRussianColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getRussianColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsRussian.join('<br>');
     } 
 
   else if (eventLayer.name === "Chinese - Speak English Less Than 'Very Well'") {
@@ -723,7 +723,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getChineseColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getChineseColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsChinese.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getChineseColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getChineseColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsChinese.join('<br>');
     } 
 
   else if (eventLayer.name === "Korean - Speak English Less Than 'Very Well'") {
@@ -741,7 +741,7 @@ map1.on("baselayerchange", function(eventLayer) {
         from + (to ? '% &ndash; ' + to + '%' : '% +') );
     }
 
-    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br><br>' + '<i style="background:' + getKoreanColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getKoreanColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br>' + labelsKorean.join('<br>');
+    legend.getContainer().innerHTML = "<h5>" + eventLayer.name + "</h5>" + '<i style= "outline: black dashed thin; border:thin black dashed"></i>' + 'Community District' + '<br>' + '<i style="background:' + getKoreanColor(0, "Airport/Non-Park") + '"></i> ' + 'Airports/Navy Yards' + '<br>' + '<i style="background:' + getKoreanColor(0, "Parks") + '"></i> ' + 'Parks/Open Space/Cemetery' + '<br><br>' + labelsKorean.join('<br>');
     }  
 
 });
