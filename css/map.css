@@ -72,6 +72,7 @@ body {
 .click {
   width: 410px;
   height: 375px;
+  /*height: 175px;*/
   padding: 6px 8px;
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
@@ -106,4 +107,8 @@ body {
   opacity: 0.5;
   outline: gray solid thin;
 }
+
+/*.nvd3 rect{
+      display: none !important;
+}*/
 

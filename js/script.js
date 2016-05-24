@@ -56,7 +56,15 @@ infoClick.updateAll = function (props) {
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
     '<b>' + props.ntaname + '</b><br/><br/>Speak English Less Than "Very Well"'  
     // + (props.bndrytype != 'NTA' ? 'N/A' : props.language_top + '</b><br /><h5>' +  top + '%' + '  +/-  ' + props.language_pct_moe_top + '%</h5>') 
-    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: ' + props.lgoenglepp + '%</b><br/><br/>Top Languages<br/><div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
+    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: </b>' + props.lgoenglepp + '%<br/><br/>Top Languages<br/>'
+    + '<div id="ntaChart"><svg width="400" height="290"></svg></div>'
+    // + '<b>' + props.language_top.split("-")[0] + ': </b>' + ((props.language_pct_top)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_second.split("-")[0] + ': </b>' + ((props.language_pct_second)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_third.split("-")[0] + ': </b>' + ((props.language_pct_third)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_fourth.split("-")[0] + ': </b>' + ((props.language_pct_fourth)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_fifth.split("-")[0] + ': </b>' + ((props.language_pct_fifth)*100).toFixed(1) + '%<br/>'
+
+    ) : '</br></br></br></br></br></br><h5>Click a Neighborhood</h5>');
 
 };
 
@@ -157,19 +165,19 @@ function zoomToFeatureAll(e) {
         values: [
           { 
             "label" : props.language_top.split("-")[0],
-            "value" : (parseFloat(props.language_pct_top)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_top))*100).toFixed(1)
           } , 
           { 
             "label" : props.language_second.split("-")[0], 
-            "value" : (parseFloat(props.language_pct_second)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_second))*100).toFixed(1)
           } , 
           { 
             "label" : props.language_third.split("-")[0], 
-            "value" : (parseFloat(props.language_pct_third)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_third))*100).toFixed(1)
           } , 
           { 
             "label" : props.language_fourth.split("-")[0], 
-            "value" : (parseFloat(props.language_pct_fourth)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_fourth))*100).toFixed(1)
           } 
           // , 
           // { 
