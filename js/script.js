@@ -11,12 +11,7 @@ var map1 = new L.Map('map', {
 //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 // }).addTo(map1);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-maxZoom: 18,
-id: 'nycedcmisgis.ndh346pj',
-accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
-}).addTo(map1);
+L.tileLayer('https://api.mapbox.com/styles/v1/zhoujh42/cishmoep8000c2ym30mtsm5o0/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiemhvdWpoNDIiLCJhIjoiY2VkNGU4OGE1YjEwODMxODUyMmUzNjYwZjQyOWNkODMifQ.55ZHYWs5RP3CfpIyrmOisQ').addTo(map1);
 
 var info = L.control({position: 'bottomleft'});
 var infoClick = L.control({position: 'bottomleft'});
