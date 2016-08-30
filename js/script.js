@@ -11,12 +11,7 @@ var map1 = new L.Map('map', {
 //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 // }).addTo(map1);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-maxZoom: 18,
-id: 'nycedcmisgis.ndh346pj',
-accessToken: 'pk.eyJ1IjoibnljZWRjbWlzZ2lzIiwiYSI6ImViWWc2bXMifQ.tQLdsPcTjM1Db66vk8YoPA',
-}).addTo(map1);
+L.tileLayer('https://api.mapbox.com/styles/v1/zhoujh42/cishmoep8000c2ym30mtsm5o0/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiemhvdWpoNDIiLCJhIjoiY2VkNGU4OGE1YjEwODMxODUyMmUzNjYwZjQyOWNkODMifQ.55ZHYWs5RP3CfpIyrmOisQ').addTo(map1);
 
 var info = L.control({position: 'bottomleft'});
 var infoClick = L.control({position: 'bottomleft'});
@@ -56,7 +51,15 @@ infoClick.updateAll = function (props) {
     // '<i style="background:' + getAllColor(props.lgoenglepp, props.bndrytype) + '"></i> ' + 
     '<b>' + props.ntaname + '</b><br/><br/>Speak English Less Than "Very Well"'  
     // + (props.bndrytype != 'NTA' ? 'N/A' : props.language_top + '</b><br /><h5>' +  top + '%' + '  +/-  ' + props.language_pct_moe_top + '%</h5>') 
-    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: ' + props.lgoenglepp + '%</b><br/><br/>Top Languages<br/><div id="ntaChart"><svg width="400" height="290"></svg></div>') : '<h5>Click a Neighborhood</h5>');
+    + (props.bndrytype != 'NTA' ? '<br/><br/><br/>The neighborhood you are looking for <br/>does not have data available.' : '<br/><b>' + 'Total: </b>' + props.lgoenglepp + '%<br/><br/>Top Languages<br/>'
+    + '<div id="ntaChart"><svg width="400" height="290"></svg></div>'
+    // + '<b>' + props.language_top.split("-")[0] + ': </b>' + ((props.language_pct_top)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_second.split("-")[0] + ': </b>' + ((props.language_pct_second)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_third.split("-")[0] + ': </b>' + ((props.language_pct_third)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_fourth.split("-")[0] + ': </b>' + ((props.language_pct_fourth)*100).toFixed(1) + '%<br/>'
+    // + '<b>' + props.language_fifth.split("-")[0] + ': </b>' + ((props.language_pct_fifth)*100).toFixed(1) + '%<br/>'
+
+    ) : '</br></br></br></br></br></br><h5>Click a Neighborhood</h5>');
 
 };
 
@@ -157,19 +160,19 @@ function zoomToFeatureAll(e) {
         values: [
           { 
             "label" : props.language_top.split("-")[0],
-            "value" : (parseFloat(props.language_pct_top)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_top))*100).toFixed(1)
           } , 
           { 
             "label" : props.language_second.split("-")[0], 
-            "value" : (parseFloat(props.language_pct_second)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_second))*100).toFixed(1)
           } , 
           { 
             "label" : props.language_third.split("-")[0], 
-            "value" : (parseFloat(props.language_pct_third)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_third))*100).toFixed(1)
           } , 
           { 
             "label" : props.language_fourth.split("-")[0], 
-            "value" : (parseFloat(props.language_pct_fourth)*100).toFixed(1)
+            "value" : ((parseFloat(props.language_pct_fourth))*100).toFixed(1)
           } 
           // , 
           // { 
